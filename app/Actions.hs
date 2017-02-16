@@ -8,11 +8,11 @@ module Actions where
 
 import           Control.Error
 
-import           GithubReport.Actions.Default
+import           GithubReport.Actions.Triage
 
 import           Types
 
 
 action :: Actions -> Script ()
 
-action Default{..} = defaultAction defaultInput defaultOutput
+action Triage{..} = triageReport triageInput triageOutput

@@ -1,11 +1,12 @@
 module Types where
 
 
+import Data.Text
 -- import           GithubReport.Types
 
 
 data Actions
-        = Default { defaultOutput :: !FilePath
-                  , defaultInput  :: !FilePath
-                  }
+        = Triage { triageOutput :: !FilePath
+                 , triageInput  :: ![Text]
+                 }
         deriving (Show, Eq)

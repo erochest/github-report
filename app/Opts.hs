@@ -11,8 +11,8 @@ module Opts
 
 -- import           Control.Monad       (mzero)
 -- import qualified Data.List           as L
--- import qualified Data.Text           as T
 import           Data.Monoid
+import qualified Data.Text           as T
 import           Options.Applicative
 
 -- import           GithubReport.Types
@@ -24,21 +24,26 @@ outputOpt :: Parser FilePath
 outputOpt = strOption (  short 'o' <> long "output" <> metavar "OUTPUT_FILE"
                       <> help "The file to write back to.")
 
-inputOpt :: Parser FilePath
-inputOpt = strOption (  short 'i' <> long "input" <> metavar "INPUT_FILE"
-                     <> help "The input file to process.")
+-- inputOpt :: Parser FilePath
+-- inputOpt = strOption (  short 'i' <> long "input" <> metavar "INPUT_FILE"
+--                      <> help "The input file to process.")
 
 -- inputsOpt :: Parser [FilePath]
 -- inputsOpt = many (strArgument (  metavar "INPUT_FILES ..."
                               -- <> help "Input data files."))
 
-defaultOpts :: Parser Actions
-defaultOpts = Default <$> outputOpt <*> inputOpt
+triageOpts :: Parser Actions
+triageOpts =   Triage
+           <$> outputOpt
+           <*> many (argument (T.pack <$> str)
+                        (  metavar "OWNER/NAME"
+                        <> help "A repository to include in the report"
+                        ))
 
 opts' :: Parser Actions
 opts' = subparser
-      (  command "default" (info (helper <*> defaultOpts)
-                          (progDesc "Default action and options."))
+      (  command "triage" (info (helper <*> triageOpts)
+                          (progDesc "Report on open issues and pull requests."))
       )
 
 opts :: ParserInfo Actions
