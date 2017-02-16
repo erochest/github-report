@@ -46,7 +46,9 @@ request = ExceptT . fmap (first displayException)
 parseRepo :: T.Text -> (Name Owner, Name Repo)
 parseRepo repoSpec =
     let (owner, repo) = T.break (== '/') repoSpec
-    in (mkName (Proxy :: Proxy Owner) owner, mkName (Proxy :: Proxy Repo) repo)
+    in ( mkName (Proxy :: Proxy Owner) owner
+       , mkName (Proxy :: Proxy Repo) (fold $ fmap snd $ T.uncons repo)
+       )
 
 issueReport :: T.Text -> Issue -> TriageReport
 issueReport r Issue{..} = TR "" r issueTitle time GHT.Issue url
